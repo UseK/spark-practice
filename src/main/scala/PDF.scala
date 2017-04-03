@@ -1,10 +1,10 @@
+package com.usek.stockfoldermeeting
 import java.io.File
 
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.text.PDFTextStripper
 
 import scala.util.matching.Regex
-
 /**
   * Created by yf on 2017/03/22.
   */
@@ -18,7 +18,7 @@ class PDF(path: String) {
   }
 
   def dates(): Iterator[Regex.Match] = {
-    text().lines.flatMap (
+    text().lines.flatMap(
       year_month_date.findFirstMatchIn(_)
     )
   }
