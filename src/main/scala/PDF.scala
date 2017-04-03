@@ -1,25 +1,25 @@
-import java.awt.print.PrinterJob
 import java.io.File
 
 import org.apache.pdfbox.pdmodel.PDDocument
-import org.apache.pdfbox.printing.PDFPageable
 import org.apache.pdfbox.text.PDFTextStripper
+
+import scala.util.matching.Regex
 
 /**
   * Created by yf on 2017/03/22.
   */
 class PDF(path: String) {
   val document: PDDocument = PDDocument.load(new File(path))
+  val year_month_date: Regex = "([0-9０-９]+)年([0-9０-９]+)月([0-9０-９]+)日".r
 
   def text(): String = {
     val stripper = new PDFTextStripper()
     stripper.getText(document)
   }
 
-  def dates(): List[String] = {
-    val year_month_date = "([0-9０-９]+)年([0-9０-９]+)月([0-9０-９]+)日".r
+  def dates(): Iterator[Regex.Match] = {
     text().lines.flatMap (
-      year_month_date.findFirstIn(_)
-    ).toList
+      year_month_date.findFirstMatchIn(_)
+    )
   }
 }
