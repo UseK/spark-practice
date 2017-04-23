@@ -13,6 +13,7 @@ class TestCrawler extends FunSpec {
       val links = crawler.getLinks(firstResult, "a[href]")
       //println(links)
       val myMap = Map('one -> 1)
+
     }
   }
 }
