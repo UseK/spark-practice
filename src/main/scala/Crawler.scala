@@ -21,3 +21,7 @@ class Crawler {
       .map(_.group(1))
   }
 }
+
+object Crawler {
+  def apply(): Crawler = new Crawler()
+}
