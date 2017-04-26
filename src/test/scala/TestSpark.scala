@@ -1,6 +1,5 @@
-import com.usek.stockfoldermeeting.{Linkage => lk}
+import com.usek.stockfoldermeeting.{Linkage => LK}
 import org.apache.spark.SparkContext
-import org.apache.spark.SparkContext._
 import org.scalatest.FunSpec
 
 /**
@@ -21,10 +20,21 @@ class TestSpark extends FunSpec {
           |"is_match"""".stripMargin.replace("\n", "")
       assert(expected == head(0))
       assert(head(0) == rawBlocks.take(10)(0))
-      assert(lk.isHeader(head(0)))
-      val bodies = head.filter(!lk.isHeader(_))
+      assert(LK.isHeader(head(0)))
+      val bodies = head.filter(!LK.isHeader(_))
       assert(9 == bodies.length)
-      lk.parse(head(5))
+      LK.parse(head(5))
+      class AieeInt  {
+        def aiee = "aiee"
+      }
+      implicit def int2AieeInt(x: Int): AieeInt = new AieeInt
+      implicit def int2String(x: Int): String = "aiee"
+      implicit def arraryStiring2Int(x: Array[String]): Int = {
+        114514
+      }
+      println(1 + Array("1"))
+      val one = 1
+      println(one.aiee)
     }
   }
 }

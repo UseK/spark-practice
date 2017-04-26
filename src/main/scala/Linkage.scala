@@ -7,8 +7,14 @@ object Linkage {
     line.contains("id_1")
   }
 
+  def toDouble(s: String): Double = {
+    if (s == "?") Double.NaN else s.toDouble
+  }
+
   def parse(line: String) = {
+    println(line)
     val pieces = line.split(",")
-    print(pieces(0).toInt)
+    val id1 = pieces(0).toInt
+    val scores = pieces.slice(2, pieces.length-1).map(toDouble)
   }
 }
