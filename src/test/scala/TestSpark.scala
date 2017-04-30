@@ -1,4 +1,4 @@
-import com.usek.stockfoldermeeting.{Linkage => LK}
+import com.usek.stockfoldermeeting.{MySpark, Linkage => LK}
 import org.apache.spark.SparkContext
 import org.scalatest.FunSpec
 
@@ -7,10 +7,10 @@ import org.scalatest.FunSpec
   */
 class TestSpark extends FunSpec {
   describe("Spark") {
-    val sc = new SparkContext("local", "example")
-    val rawBlocks = sc.textFile("data/linkage")
-    val head = rawBlocks.take(10)
-    val noHeader = rawBlocks.filter(!LK.isHeader(_))
+    val mySpark = MySpark("data/linkage")
+    val rawBlocks = mySpark.rawBlocks
+    val head = mySpark.head
+    val noHeader = mySpark.noHeader
 
     it("works") {
       val expected =
@@ -39,7 +39,7 @@ class TestSpark extends FunSpec {
     }
 
     it("filter") {
-      val mds = head.filter(!LK.isHeader(_)).map(LK.parse)
+      val mds = head.filter(LK.isBody).map(LK.parse)
     }
 
     it("cache") {

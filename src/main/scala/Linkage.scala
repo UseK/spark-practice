@@ -1,4 +1,7 @@
 package com.usek.stockfoldermeeting
+
+import org.apache.spark.SparkContext
+
 /**
   * Created by yf on 2017/04/23.
   */
@@ -6,6 +9,7 @@ object Linkage {
   def isHeader(line: String): Boolean = {
     line.contains("id_1")
   }
+  def isBody(line: String): Boolean = !isHeader(line)
 
   def toDouble(s: String): Double = {
     if (s == "?") Double.NaN else s.toDouble
@@ -25,4 +29,15 @@ object Linkage {
     val matched = pieces(pieces.length-1) == "TRUE"
     MatchData(id1, id2, scores, matched)
   }
+}
+
+class MySpark(path: String) {
+  val sc = new SparkContext("local", "example")
+  val rawBlocks = sc.textFile(path)
+  val head = rawBlocks.take(10)
+  val noHeader = rawBlocks.filter(!Linkage.isHeader(_))
+}
+
+object MySpark {
+  def apply(path: String) = new MySpark(path)
 }
