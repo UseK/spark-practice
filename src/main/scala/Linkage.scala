@@ -36,6 +36,7 @@ class MySpark(path: String) {
   val rawBlocks = sc.textFile(path)
   val head = rawBlocks.take(10)
   val noHeader = rawBlocks.filter(!Linkage.isHeader(_))
+  def stop: Unit = sc.stop
 }
 
 object MySpark {
