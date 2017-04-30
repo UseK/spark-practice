@@ -10,6 +10,7 @@ class TestSpark extends FunSpec {
     val sc = new SparkContext("local", "example")
     val rawBlocks = sc.textFile("data/linkage")
     val head = rawBlocks.take(10)
+    val noHeader = rawBlocks.filter(!LK.isHeader(_))
 
     it("works") {
       val expected =
@@ -35,6 +36,15 @@ class TestSpark extends FunSpec {
     it("bodies") {
       val bodies = head.filter(!LK.isHeader(_))
       assert(9 == bodies.length)
+    }
+
+    it("filter") {
+      val mds = head.filter(!LK.isHeader(_)).map(LK.parse)
+    }
+
+    it("cache") {
+      val parsed = noHeader.map(LK.parse)
+      parsed.cache()
     }
   }
 }
