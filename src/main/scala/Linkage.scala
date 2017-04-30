@@ -1,6 +1,7 @@
 package com.usek.stockfoldermeeting
 
 import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD
 
 /**
   * Created by yf on 2017/04/23.
@@ -21,13 +22,19 @@ object Linkage {
                        matched: Boolean)
 
   def parse(line: String): MatchData = {
-    println(line) //36950,42116,1,?,1,1,1,1,1,1,1,TRUE
+    //println(line) //36950,42116,1,?,1,1,1,1,1,1,1,TRUE
     val pieces = line.split(",")
     val id1 = pieces(0).toInt
     val id2 = pieces(1).toInt
     val scores = pieces.slice(2, pieces.length-1).map(toDouble)
     val matched = pieces(pieces.length-1) == "TRUE"
     MatchData(id1, id2, scores, matched)
+  }
+
+  def histogram(mds: RDD[MatchData]): RDD[(Boolean, Int)] = {
+    val grouped = mds.groupBy(_.matched)
+    val hist = grouped.mapValues(_.size)
+    hist
   }
 }
 

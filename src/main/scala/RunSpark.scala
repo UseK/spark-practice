@@ -11,8 +11,10 @@ object RunSpark {
     val mds = mySpark.head.filter(LK.isBody).map(LK.parse)
     val parsed = mySpark.noHeader.map(LK.parse)
     println("----------------------")
-    println(parsed)
+    val matchCounts = parsed.map(_.matched).countByValue()
+    println(matchCounts) //Map(true -> 20931, false -> 5728201)
     println("----------------------")
+    parsed.cache
     mySpark.stop
   }
 }
