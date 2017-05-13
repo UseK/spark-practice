@@ -1,4 +1,5 @@
 package com.usek.stockfoldermeeting
+import java.lang.Double.isNaN
 
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
@@ -62,7 +63,6 @@ class MySpark(path: String) {
   }
 
   def scoreStat(n: Int=0) = {
-    import java.lang.Double.isNaN
     parsed.map(_.scores(n)).filter(!isNaN(_)).stats()
   }
 }
