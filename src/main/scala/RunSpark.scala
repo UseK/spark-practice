@@ -15,13 +15,11 @@ object RunSpark {
     System.setProperty("log4j.warn", "")
 
     val mySpark = MySpark("data/linkage")
-    val mds = mySpark.head.filter(LK.isBody).map(LK.parse)
-    val parsed = mySpark.noHeader.map(LK.parse)
     println("----------------------")
-    val matchCounts = parsed.map(_.matched).countByValue()
-    println(matchCounts) //Map(true -> 20931, false -> 5728201)
+    println(mySpark.scoreStats())
     println("----------------------")
-    parsed.cache
+    println()
+    mySpark.parsed.cache
     mySpark.stop
   }
 }

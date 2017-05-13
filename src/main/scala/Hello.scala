@@ -8,8 +8,4 @@ class Hello {
 }
 
 object Hello {
-  def main(args: Array[String]): Unit = {
-    val path ="data/pdf/hitachi.pdf"
-    val pdf = new PDF(path)
-  }
 }

@@ -2,6 +2,7 @@ package com.usek.stockfoldermeeting
 
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
+import org.apache.spark.util.StatCounter
 
 /**
   * Created by yf on 2017/04/23.
@@ -43,7 +44,27 @@ class MySpark(path: String) {
   val rawBlocks = sc.textFile(path)
   val head = rawBlocks.take(10)
   val noHeader = rawBlocks.filter(!Linkage.isHeader(_))
+  val parsed = noHeader.map(Linkage.parse)
+
   def stop: Unit = sc.stop
+
+  def mds() = {
+    head.filter(Linkage.isBody).map(Linkage.parse)
+  }
+
+  def matchCounts() = {
+    parsed.map(_.matched).countByValue()
+  }
+
+  def scoreStats(): IndexedSeq[StatCounter]   = {
+    val N = parsed.first.scores.length
+    (0 until N).map(i => scoreStat(i))
+  }
+
+  def scoreStat(n: Int=0) = {
+    import java.lang.Double.isNaN
+    parsed.map(_.scores(n)).filter(!isNaN(_)).stats()
+  }
 }
 
 object MySpark {
