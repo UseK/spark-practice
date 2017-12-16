@@ -4,6 +4,7 @@ import java.lang.Double.isNaN
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 import org.apache.spark.util.StatCounter
+import org.apache.spark.sql.SparkSession
 
 /**
   * Created by yf on 2017/04/23.
@@ -70,3 +71,20 @@ class MySpark(path: String) {
 object MySpark {
   def apply(path: String) = new MySpark(path)
 }
+
+class MyDataFrame(path: String) {
+  val spark = SparkSession.builder().
+    master("local").
+    appName("example").
+    getOrCreate()
+  val parsed = spark.read.
+    option("header", "true").
+    option("nullValue", "?").
+    option("inferSchema", "true").
+    csv(path)
+}
+
+object MyDataFrame {
+  def apply(path: String): MyDataFrame = new MyDataFrame(path)
+}
+

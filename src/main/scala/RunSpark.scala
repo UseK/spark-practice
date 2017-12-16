@@ -1,4 +1,4 @@
-import com.usek.stockfoldermeeting.{MySpark, Linkage => LK}
+import com.usek.stockfoldermeeting.{MySpark, Linkage => LK, MyDataFrame}
 import org.apache.hadoop.yarn.util.RackResolver
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.util.StatCounter
@@ -14,12 +14,17 @@ object RunSpark {
     Logger.getLogger("org").setLevel(Level.OFF)
     Logger.getLogger("akka").setLevel(Level.OFF)
     System.setProperty("log4j.warn", "")
+    val myDF = MyDataFrame("data/linkage")
+    myDF.parsed.printSchema()
+    myDF.parsed.show()
+  }
 
+  def runWithRDD = {
     val mySpark = MySpark("data/linkage")
     println("----------------------")
     val nasRDD = mySpark.parsed.map(_.scores.map(NAStatCounter(_)))
     val reduced = nasRDD.reduce((n1, n2) => {
-      n1.zip(n2).map { case (a, b) => a.merge(b)}
+      n1.zip(n2).map { case (a, b) => a.merge(b) }
     })
     reduced.foreach(println)
 
