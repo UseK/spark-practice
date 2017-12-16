@@ -17,6 +17,12 @@ object RunSpark {
 
     val mySpark = MySpark("data/linkage")
     println("----------------------")
+    val nasRDD = mySpark.parsed.map(_.scores.map(NAStatCounter(_)))
+    val reduced = nasRDD.reduce((n1, n2) => {
+      n1.zip(n2).map { case (a, b) => a.merge(b)}
+    })
+    reduced.foreach(println)
+
     println("----------------------")
     mySpark.parsed.cache
     mySpark.stop
@@ -24,11 +30,14 @@ object RunSpark {
 
   def useNaStatCounter = {
     val nas1 = NAStatCounter(10.0)
-    nas1.add(Double.NaN)
     println(nas1)
+    //stats: (count: 1, mean: 10.000000, stdev: 0.000000,
+    //max: 10.000000, min: 10.000000) NaN: 1nas1.add(Double.NaN)
+
     val sCounter = new StatCounter()
     val newCounter = sCounter.merge(10.0)
     newCounter.merge(Double.NaN)
     println(newCounter)
+    //(count: 2, mean: NaN, stdev: NaN, max: NaN, min: NaN)
   }
 }
