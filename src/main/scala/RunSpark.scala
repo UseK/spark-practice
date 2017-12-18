@@ -14,7 +14,7 @@ object RunSpark {
     Logger.getLogger("org").setLevel(Level.OFF)
     Logger.getLogger("akka").setLevel(Level.OFF)
     System.setProperty("log4j.warn", "")
-    val myDF = MyDataFrame("data/linkage")
+    val myDF = MyDataFrame("data/dummy")
     myDF.parsed.printSchema()
     myDF.parsed.show()
   }

@@ -2,10 +2,11 @@ package com.usek.stockfoldermeeting
 import java.lang.Double.isNaN
 
 import org.apache.spark.SparkContext
+import org.apache.spark.ml.feature.VectorAssembler
 import org.apache.spark.rdd.RDD
 import org.apache.spark.util.StatCounter
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.mllib.classification.ClassificationModel
+import org.apache.spark.ml.classification.DecisionTreeClassifier
 
 
 /**
@@ -84,6 +85,22 @@ class MyDataFrame(path: String) {
     option("nullValue", "?").
     option("inferSchema", "true").
     csv(path)
+  val featureCol = (Array("face", "academic_background", "personality"))
+  val assembler = new VectorAssembler().
+    setInputCols(featureCol).
+    setOutputCol("featureVector")
+  val assembledTrainData = assembler.transform(parsed)
+  assembledTrainData.select("featureVector").show(truncate = false)
+  val classifier = new DecisionTreeClassifier().
+    setSeed(7777.toLong).
+    setLabelCol("result").
+    setFeaturesCol("featureVector").
+    setPredictionCol("prediction")
+  val model = classifier.fit(assembledTrainData)
+  println(model.toDebugString)
+
+
+
 }
 
 object MyDataFrame {
