@@ -10,5 +10,8 @@ libraryDependencies += "org.bouncycastle" % "bcmail-jdk15" % "1.44"
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.1"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 libraryDependencies += "net.ruippeixotog" %% "scala-scraper" % "1.2.0"
-libraryDependencies += "org.apache.spark" %% "spark-core" % "2.1.0"
-libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.1.0"
+
+val sparkVersion = "2.1.0"
+libraryDependencies += "org.apache.spark" %% "spark-core" % sparkVersion
+libraryDependencies += "org.apache.spark" %% "spark-sql" % sparkVersion
+libraryDependencies += "org.apache.spark" %% "spark-mllib" % sparkVersion
