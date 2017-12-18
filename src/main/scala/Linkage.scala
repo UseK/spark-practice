@@ -98,6 +98,9 @@ class MyDataFrame(path: String) {
     setPredictionCol("prediction")
   val model = classifier.fit(assembledTrainData)
   println(model.toDebugString)
+  val predictions = model.transform(assembledTrainData)
+  predictions.select("result", "prediction", "probability").
+    show()
 
 
 
